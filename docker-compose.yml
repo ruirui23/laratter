@@ -5,7 +5,6 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: 'sail-8.4/app'
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -14,7 +13,6 @@ services:
         environment:
             MYSQL_USERNAME: "${DB_USERNAME}"
             MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-            PMA_HOST: mysql
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
@@ -30,6 +28,20 @@ services:
             - meilisearch
             - mailpit
             - selenium
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        links:
+            - mysql:mysql
+        ports:
+            - 8081:80
+        environment:
+            PMA_HOST: mysql
+        networks:
+            - sail
+
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
