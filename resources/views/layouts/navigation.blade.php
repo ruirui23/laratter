@@ -13,7 +13,14 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('ダッシュボード') }}
+                    </x-nav-link>
+                    <!-- 🔽 2項目追加 -->
+                    <x-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
+                       {{ __('Tweet一覧') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
+                       {{ __('Tweet作成') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -70,7 +77,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-        </div>
+             <!-- 🔽 2項目追加 -->
+      <x-responsive-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
+        {{ __('Tweet一覧') }}
+      </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
+        {{ __('Tweet作成') }}
+      </x-responsive-nav-link>
+   </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
