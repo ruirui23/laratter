@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Tweet;
+use App\Models\User;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-// 🔽 追加
-use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -18,8 +19,29 @@ class ProfileController extends Controller
      */
     public function show(User $user)
   {
-    return view('profile.show', compact('user'));
+    if (auth()->user()->is($user)) {
+      $tweets = Tweet::query()
+        ->where('user_id', $user->id)  // 自分のツイート
+        ->orWhereIn('user_id', $user->follows->pluck('id')) // フォローしているユーザーのツイート
+        ->latest()
+        ->paginate(10);
+    } else {
+      // 他のユーザーの場合、そのユーザーのツイートのみを取得
+      $tweets = $user
+        ->tweets()
+        ->latest()
+        ->paginate(10);
+    }
+
+    // ユーザーのフォロワーとフォローしているユーザーを取得
+    $user->load(['follows', 'followers']);
+
+    return view('profile.show', compact('user', 'tweets'));
   }
+
+    /**
+     * Display the user's profile form.
+     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -62,5 +84,6 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    
     }
 }
