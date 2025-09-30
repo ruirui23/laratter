@@ -53,6 +53,16 @@ class User extends Authenticatable
   {
       return $this->belongsToMany(Tweet::class)->withTimestamps();
   }
+
+  public function follows()
+  {
+    return $this->belongsToMany(User::class, 'follows', 'follow_id', 'follower_id');
+  }
+
+  public function followers()
+  {
+    return $this->belongsToMany(User::class, 'follows', 'follower_id', 'follow_id');
+  }
   public function comments()
   {
     return $this->hasMany(Comment::class);
