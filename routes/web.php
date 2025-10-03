@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LaraiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\TweetLikeController;
@@ -24,6 +25,10 @@ Route::middleware('auth')->group(function () {
      // 🔽 検索のルーティングを追加
     Route::get('/tweets/search', [TweetController::class, 'search'])->name('tweets.search');
     Route::resource('tweets', TweetController::class);
+    
+    // 🔽 Laraiのルーティングを追加
+    Route::resource('larai', LaraiController::class)->except(['edit', 'update']);
+    
     Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
     Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
     Route::resource('tweets.comments', CommentController::class);
